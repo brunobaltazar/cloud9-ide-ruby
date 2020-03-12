@@ -1,5 +1,8 @@
 FROM linuxserver/cloud9:latest
 
+ENV RUBY_VERSION 2.7.0
+ENV RAILS_VERSION 6.0.2
+
 ############# cliente oracle #######################################################
 
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/
@@ -91,8 +94,6 @@ RUN sudo gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703
 
 RUN \curl -sSL https://rvm.io/mpapis.asc | gpg --import -
 RUN \curl -sSL https://get.rvm.io | bash -s stable --ruby
-ENV RUBY_VERSION 2.7.0
-ENV RAILS_VERSION 6.0.2
 
 RUN  /bin/bash -l -c "source /usr/local/rvm/scripts/rvm"
 RUN  /bin/bash -l -c "rvm install $RUBY_VERSION"
