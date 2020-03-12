@@ -1,0 +1,7 @@
+#!/bin/sh
+export DYLD_LIBRARY_PATH=/opt/oracle/instantclient_12_2
+export ORACLE_HOME=/opt/oracle/instantclient_12_2
+export OCI_DIR=/opt/oracle/instantclient_12_2
+export TNS_ADMIN=/opt/oracle/instantclient_12_2/network/admin
+export PATH=$PATH:/opt/oracle/instantclient_12_2
+export LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/
