@@ -4,16 +4,17 @@ services:
     image: ide:1.0
     container_name: devops_ide_ruby
     environment:
-      - PUID=0
-      - PGID=0
+      #- PUID=0
+      #- PGID=0
       - TZ=America/Fortaleza
       - LANG=pt_BR.UTF-8
-      - GITURL=http://git/sistemas/rails-appref.git #optional
+      #- GITURL=      #optional
       - USERNAME=devops
       - PASSWORD=devops
     volumes:
-      - /path/to/your/code:/code #optional
-      - /var/run/docker.sock:/var/run/docker.sock #optional
+     #  - /tmp:/code #optional
+       - /var/run/docker.sock:/var/run/docker.sock #optional
     ports:
       - 8000:8000
+      - 3000:3000
     restart: unless-stopped
