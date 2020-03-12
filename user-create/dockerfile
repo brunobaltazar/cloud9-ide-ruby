@@ -1,0 +1,4 @@
+FROM ubuntu:latest
+RUN useradd -r -u 1001 -g sudo rails_user
+USER rails_user
+CMD /bin/bash
