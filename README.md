@@ -2,7 +2,7 @@
 
 Trata-se de uma imagem do Ubuntu 18.04 64 bits em Docker contendo um ambiente de desenvolvimento em Ruby on Rails pronto para utilizar.
 
-Não é necessário a instalação de dependências pois já vem todo configurado no padrão Rails AppRef.
+Não é necessário a instalação de dependências pois já vem todo configurado com os padrões abaixo.
 A imagem possui uma IDE open-source da Amazon chamada Cloud9 e deve ser iniciada utilizando docker-compose padrão.
 
 ----
