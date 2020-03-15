@@ -1,9 +1,9 @@
 FROM linuxserver/cloud9:latest
 
-ENV RUBY_VERSION 2.7.0
-ENV RAILS_VERSION 6.0.2
+ENV RUBY_VERSION 2.4.2
+ENV RAILS_VERSION 5.1.4
 
-############# cliente oracle #######################################################
+#############  oracle client #######################################################
 
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/
 RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/
@@ -24,7 +24,7 @@ RUN cd /opt/oracle \
  && unzip instantclient-sqlplus-linux.x64-12.2.0.1.0.zip \
  && cd /opt/oracle/instantclient_12_2 && ln -s libclntsh.so.12.1 libclntsh.so
 
-############# dependencias e softwares ########################################
+############# dependencies and softwares ########################################
 
 RUN apt-get -y  install wget \
      && apt-get -y  install curl \
@@ -34,7 +34,7 @@ RUN apt-get -y  install wget \
      && apt-get -y  install libaio1 \
      && apt-get -y install git
 
-############### nodejs e yarn #########################################################
+############### nodejs and yarn #########################################################
 
 RUN apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
@@ -70,10 +70,13 @@ RUN apt-get -y install postgresql-11
 
 ############### USER  ############################################################
 
-RUN useradd -m -u 1500 -g 27 -o -s /bin/bash rails
-RUN usermod -a -G root rails
-RUN echo 'rails ALL=NOPASSWD:ALL'>> /etc/sudoers
-RUN echo 'rails:rails' | chpasswd
+RUN useradd -m -u 1500 -o -s /bin/bash rails
+
+RUN usermod -a -G root rails \
+    && usermod -a -G rails rails \
+    && usermod -a -G sudo rails \
+    && echo 'rails ALL=NOPASSWD:ALL'>> /etc/sudoers \
+    && echo 'rails:rails' | chpasswd
 
 RUN mkdir /var/run/s6
 RUN chown rails -R /var/run/s6
@@ -87,10 +90,9 @@ RUN sudo apt install curl \
   && sudo apt-get install git-core zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev nodejs yarn
 
 
-#USER rails
-
 RUN sudo apt-get install -y libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
 RUN sudo gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+
 
 RUN \curl -sSL https://rvm.io/mpapis.asc | gpg --import -
 RUN \curl -sSL https://get.rvm.io | bash -s stable --ruby
@@ -100,7 +102,9 @@ RUN  /bin/bash -l -c "rvm install $RUBY_VERSION"
 RUN  /bin/bash -l -c "rvm use $RUBY_VERSION --default"
 RUN  /bin/bash -l -c "rvm requirements"
 RUN  /bin/bash -l -c "rvm rubygems current"
-
+RUN  /bin/bash -l -c "gem install sprockets -v 3.7.2" 
 RUN  /bin/bash -l -c "gem install rails --version=$RAILS_VERSION"
 RUN  /bin/bash -l -c "gem install bundler"
-RUN echo 'source /usr/local/rvm/scripts/rvm' >> $HOME/.bashrc
+RUN echo 'source /etc/profile.d/rvm.sh' >> /home/rails/.bashrc
+RUN chown rails:rvm -R  /usr/local/rvm/
+RUN yarn config set "strict-ssl" false -g
